@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manipulation Detector</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 20px;
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .core-questions {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 5px;
+            border-left: 3px solid #e74c3c;
+        }
+
+        .question h3 {
+            color: #e74c3c;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .question p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .red-flags {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .flag {
+            background: #fff5f5;
+            border: 1px solid #feb2b2;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .flag h4 {
+            color: #e53e3e;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .flag p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .checklist {
+            background: #f0fff4;
+            border: 1px solid #9ae6b4;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .checklist h3 {
+            color: #22543d;
+            margin-bottom: 15px;
+        }
+
+        .checklist-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .checklist-item label {
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .score-section {
+            background: #f7fafc;
+            border: 1px solid #cbd5e0;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .score {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .score-meaning {
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .score-low { background: #c6f6d5; color: #22543d; }
+        .score-medium { background: #fefcbf; color: #744210; }
+        .score-high { background: #fed7d7; color: #742a2a; }
+
+        .reset-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+
+        .reset-btn:hover {
+            background: #2980b9;
+        }
+
+        .footer {
+            background: #34495e;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* Advanced Guide Styles */
+        .advanced-guide, .dark-patterns-guide {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .dark-patterns-guide .guide-header {
+            background: linear-gradient(135deg, #dc3545, #fd7e14);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.3s ease;
+        }
+
+        .dark-patterns-guide .guide-header:hover {
+            background: linear-gradient(135deg, #c82333, #e8690b);
+        }
+
+        .guide-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.3s ease;
+        }
+
+        .guide-header:hover {
+            background: linear-gradient(135deg, #5a6fd8, #6a4190);
+        }
+
+        .guide-header h2 {
+            margin: 0 0 8px 0;
+            font-size: 1.3rem;
+        }
+
+        .expand-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .guide-subtitle {
+            font-style: italic;
+        }
+
+        #expandIcon, #darkPatternsIcon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+            font-weight: bold;
+        }
+
+        .guide-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: white;
+        }
+
+        .guide-content.expanded {
+            max-height: 5000px;
+        }
+
+        .guide-section {
+            padding: 25px;
+            border-bottom: 1px solid #f1f3f4;
+        }
+
+        .guide-section:last-child {
+            border-bottom: none;
+        }
+
+        .guide-section h3 {
+            color: #2c5282;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+
+        /* Dark Patterns Specific Styles */
+        .blast-radius-intro {
+            background: linear-gradient(135deg, #fff5f5, #fed7d7);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #e53e3e;
+            margin-bottom: 20px;
+        }
+
+        .research-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat {
+            text-align: center;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #e53e3e;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .pattern-category {
+            margin-bottom: 30px;
+        }
+
+        .pattern-header {
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .pattern-header.urgency {
+            background: #fff3cd;
+            color: #856404;
+            border-left: 4px solid #ffc107;
+        }
+
+        .pattern-header.social {
+            background: #d1ecf1;
+            color: #0c5460;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .pattern-header.complexity {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .platform-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .platform-card h5 {
+            color: #2c5282;
+            margin: 0 0 10px 0;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .platform-card p {
+            margin: 5px 0;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .action-card {
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid;
+        }
+
+        .action-card.ethical {
+            background: #f0fff4;
+            border-color: #68d391;
+        }
+
+        .action-card.warning {
+            background: #fffaf0;
+            border-color: #f6ad55;
+        }
+
+        .action-card.legal {
+            background: #ebf8ff;
+            border-color: #63b3ed;
+        }
+
+        .action-card h4 {
+            margin: 0 0 15px 0;
+            font-size: 1.1rem;
+        }
+
+        .action-card ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .action-card li {
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .frontier-analysis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .trend-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .trend-card h4 {
+            margin: 0 0 10px 0;
+            font-size: 1rem;
+        }
+
+        .trend-card p {
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            opacity: 0.95;
+        }
+
+        .cta-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .ethics-pledge {
+            background: linear-gradient(135deg, #f0fff4, #c6f6d5);
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid #48bb78;
+        }
+
+        .ethics-pledge h4 {
+            color: #22543d;
+            margin: 0 0 15px 0;
+            font-size: 1.2rem;
+        }
+
+        .pledge-content p {
+            font-style: italic;
+            color: #2d3748;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .pledge-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .pledge-item {
+            font-size: 0.85rem;
+            color: #22543d;
+            font-weight: 500;
+        }
+
+        .resources-section {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .resources-section h4 {
+            color: #2c5282;
+            margin: 0 0 15px 0;
+            font-size: 1.1rem;
+        }
+
+        .resource-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .resource-list li {
+            padding: 8px 0;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .resource-list li:last-child {
+            border-bottom: none;
+        }
+
+        .counter-thought {
+            background: #fff5f5;
+            border-left: 4px solid #f56565;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .counter-thought h4 {
+            color: #c53030;
+            margin: 0 0 10px 0;
+            font-size: 1rem;
+        }
+
+        .counter-thought p {
+            margin: 5px 0;
+            font-size: 0.95rem;
+        }
+
+        .counter-thought em {
+            color: #2d3748;
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        .protocol-steps {
+            display: grid;
+            gap: 15px;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            background: #f0fff4;
+            border-radius: 8px;
+            border-left: 4px solid #48bb78;
+        }
+
+        .step-number {
+            background: #48bb78;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+
+        .immunity-habits {
+            list-style: none;
+            padding: 0;
+        }
+
+        .immunity-habits li {
+            background: #ebf8ff;
+            border-left: 4px solid #4299e1;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.95rem;
+        }
+
+        .immunity-habits li:before {
+            content: "💡 ";
+            margin-right: 8px;
+        }
+
+        .closing-insight {
+            text-align: center;
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .closing-insight blockquote {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin: 0 0 15px 0;
+            font-style: italic;
+            position: relative;
+        }
+
+        .closing-insight blockquote:before {
+            content: '"';
+            font-size: 2rem;
+            color: #a0aec0;
+            position: absolute;
+            left: -15px;
+            top: -5px;
+        }
+
+        .closing-insight blockquote:after {
+            content: '"';
+            font-size: 2rem;
+            color: #a0aec0;
+            position: absolute;
+            right: -15px;
+            bottom: -15px;
+        }
+
+        .closing-insight p {
+            color: #4a5568;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        /* Acronym and Case Study Styles */
+        .case-study {
+            background: white;
+            border: 2px solid #fbb6ce;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .case-study h4 {
+            color: #97266d;
+            margin: 0 0 15px 0;
+            font-size: 1.1rem;
+        }
+
+        .case-study p {
+            margin: 8px 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .acronym-guide {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .acronym-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .acronym-item {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #4299e1;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .acronym-item strong {
+            display: block;
+            color: #2c5282;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .acronym-item span {
+            color: #4a5568;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* Tooltip styles for abbreviations */
+        abbr {
+            border-bottom: 1px dotted #4299e1;
+            cursor: help;
+            text-decoration: none;
+            position: relative;
+        }
+
+        abbr:hover {
+            color: #2c5282;
+        }
+
+        /* Custom tooltip for better accessibility */
+        abbr[title] {
+            position: relative;
+        }
+
+        abbr[title]:hover::after {
+            content: attr(title);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d3748;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        abbr[title]:hover::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(1px);
+            border: 5px solid transparent;
+            border-top-color: #2d3748;
+            z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            .cta-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .pledge-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .research-stats {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+            
+            .acronym-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .content, .header {
+                padding: 20px;
+            }
+            
+            .red-flags {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧠 Manipulation Detector</h1>
+            <p>Your daily defense against intellectual manipulation</p>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h2>The Core Questions</h2>
+                <div class="core-questions">
+                    <div class="question">
+                        <h3>1. What feeling is this creating in me?</h3>
+                        <p>Are you feeling urgency, fear, excitement, anger, or superiority? Emotional manipulation bypasses rational thinking.</p>
+                    </div>
+                    <div class="question">
+                        <h3>2. What "choices" am I being offered — and are they real?</h3>
+                        <p>Look for false binaries. Real choices include "ignore this" and "seek other perspectives."</p>
+                    </div>
+                    <div class="question">
+                        <h3>3. Who benefits from me accepting this narrative?</h3>
+                        <p>Follow the money, attention, or power. Who gets clicks, sales, followers, or influence?</p>
+                    </div>
+                    <div class="question">
+                        <h3>4. What's not being said that could change my response?</h3>
+                        <p>What context, alternatives, or simpler explanations are being omitted?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Red Flag Patterns</h2>
+                <div class="red-flags">
+                    <div class="flag">
+                        <h4>🎭 Dramatic Language</h4>
+                        <p>"Revolutionary," "secret," "they don't want you to know," "urgent," "crisis"</p>
+                    </div>
+                    <div class="flag">
+                        <h4>⚔️ False Binaries</h4>
+                        <p>"You're either with us or against us," "smart people vs. sheep," only two extreme options</p>
+                    </div>
+                    <div class="flag">
+                        <h4>🧠 Flattery Hooks</h4>
+                        <p>"You're too smart for this," "most people don't understand," "you're special/rare"</p>
+                    </div>
+                    <div class="flag">
+                        <h4>⏰ Artificial Urgency</h4>
+                        <p>"Act now," "limited time," "before it's too late," "window closing"</p>
+                    </div>
+                    <div class="flag">
+                        <h4>👥 In-Group Creation</h4>
+                        <p>"People like us," "true believers," "those who really understand"</p>
+                    </div>
+                    <div class="flag">
+                        <h4>🎯 Complex Solutions</h4>
+                        <p>Simple problems presented as requiring elaborate, technical, or expensive solutions</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Daily Assessment Tool</h2>
+                <div class="checklist">
+                    <h3>Check any that apply to what you're reading/watching:</h3>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="emotional" value="2">
+                        <label for="emotional">Makes me feel strong emotions (anger, fear, excitement, superiority)</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="binary" value="2">
+                        <label for="binary">Offers only two extreme choices</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="flattery" value="1">
+                        <label for="flattery">Flatters my intelligence or makes me feel special</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="urgency" value="2">
+                        <label for="urgency">Creates sense of urgency or time pressure</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="complex" value="1">
+                        <label for="complex">Suggests complex solutions for simple problems</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="ingroup" value="1">
+                        <label for="ingroup">Creates "us vs them" mentality</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="benefit" value="2">
+                        <label for="benefit">Unclear who benefits from me believing this</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="context" value="2">
+                        <label for="context">Seems to omit important context or alternatives</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="guide" value="1">
+                        <label for="guide">Positions author/speaker as my guide or teacher</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="dramatic" value="1">
+                        <label for="dramatic">Uses dramatic or revolutionary language</label>
+                    </div>
+                </div>
+
+                <div class="score-section">
+                    <div class="score" id="totalScore">0</div>
+                    <p>Manipulation Risk Score</p>
+                    <div id="scoreMeaning" class="score-meaning"></div>
+                    <button class="reset-btn" onclick="resetChecklist()">Reset Assessment</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Remember</h2>
+                <p><strong>Not everything that scores high is bad</strong> - but it deserves extra scrutiny.</p>
+                <p><strong>Trust your gut</strong> - if something feels manipulative, it probably is.</p>
+                <p><strong>Simple solutions often exist</strong> - be suspicious of unnecessary complexity.</p>
+                <p><strong>You don't need a guru</strong> - be wary of anyone positioning themselves as your guide to "truth."</p>
+            </div>
+
+            <div class="section">
+                <div class="advanced-guide">
+                    <div class="guide-header" onclick="toggleAdvancedGuide()">
+                        <h2>🧠 Advanced Cognitive Defense Toolkit</h2>
+                        <div class="expand-indicator">
+                            <span id="expandIcon">▼</span>
+                            <span class="guide-subtitle">Deep dive into narrative immunity • Click to expand</span>
+                        </div>
+                    </div>
+                    
+                    <div class="guide-content" id="advancedGuideContent">
+                        <div class="guide-section">
+                            <h3>🔴 Red Flag Zones & Counter-Thought Anchors</h3>
+                            
+                            <div class="counter-thought">
+                                <h4>1. Strong Emotional Manipulation</h4>
+                                <p><strong>Ask:</strong> What part of me is being triggered — logic, identity, or insecurity?</p>
+                                <p><strong>Counter:</strong> <em>I can observe emotion without being driven by it.</em></p>
+                            </div>
+
+                            <div class="counter-thought">
+                                <h4>2. False Binaries</h4>
+                                <p><strong>Ask:</strong> What third option or middle ground is missing?</p>
+                                <p><strong>Counter:</strong> <em>Truth often lives in nuance, not extremes.</em></p>
+                            </div>
+
+                            <div class="counter-thought">
+                                <h4>3. Flattery of Intelligence</h4>
+                                <p><strong>Ask:</strong> Is this content boosting my ego or informing my thinking?</p>
+                                <p><strong>Counter:</strong> <em>I don't need praise to assess truth.</em></p>
+                            </div>
+
+                            <div class="counter-thought">
+                                <h4>4. Artificial Urgency</h4>
+                                <p><strong>Ask:</strong> What would I do if I gave this more time?</p>
+                                <p><strong>Counter:</strong> <em>Pause expands clarity. Urgency compresses it.</em></p>
+                            </div>
+
+                            <div class="counter-thought">
+                                <h4>5. Complex Solutions for Simple Problems</h4>
+                                <p><strong>Ask:</strong> What is the core idea underneath this complexity?</p>
+                                <p><strong>Counter:</strong> <em>Simplicity is not ignorance — it's signal clarity.</em></p>
+                            </div>
+
+                            <div class="counter-thought">
+                                <h4>6. In-Group Framing</h4>
+                                <p><strong>Ask:</strong> Who wins when this becomes "us vs them"?</p>
+                                <p><strong>Counter:</strong> <em>I can belong without dividing.</em></p>
+                            </div>
+                        </div>
+
+                        <div class="guide-section">
+                            <h3>🧘 Reset Protocol</h3>
+                            <div class="protocol-steps">
+                                <div class="step">
+                                    <span class="step-number">1</span>
+                                    <div class="step-content">
+                                        <strong>Name the trigger:</strong> "I feel rushed / judged / left out."
+                                    </div>
+                                </div>
+                                <div class="step">
+                                    <span class="step-number">2</span>
+                                    <div class="step-content">
+                                        <strong>Pause for 5–10 seconds.</strong>
+                                    </div>
+                                </div>
+                                <div class="step">
+                                    <span class="step-number">3</span>
+                                    <div class="step-content">
+                                        <strong>Apply a counter-thought.</strong>
+                                    </div>
+                                </div>
+                                <div class="step">
+                                    <span class="step-number">4</span>
+                                    <div class="step-content">
+                                        <strong>Choose your next step consciously.</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="guide-section">
+                            <h3>📦 Habits to Build Narrative Immunity</h3>
+                            <ul class="immunity-habits">
+                                <li>Use reader modes and offline tools to defang persuasion layers</li>
+                                <li>Maintain a journal of content that felt emotionally manipulative</li>
+                                <li>Practice "I don't know yet" as a default response</li>
+                            </ul>
+                        </div>
+
+                        <div class="guide-section">
+                            <h3>📌 Closing Insight</h3>
+                            <div class="closing-insight">
+                                <blockquote>
+                                    "Clear thinking is a form of rebellion."
+                                </blockquote>
+                                <p>Use this guide alongside the interactive checker as twin tools for cognitive sovereignty.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="dark-patterns-guide">
+                    <div class="guide-header" onclick="toggleDarkPatternsGuide()">
+                        <h2>⚡ Dark Patterns Hall of Shame</h2>
+                        <div class="expand-indicator">
+                            <span id="darkPatternsIcon">▼</span>
+                            <span class="guide-subtitle">Designer/Developer education • Real-world manipulation examples • Click to expand</span>
+                        </div>
+                    </div>
+                    
+                    <div class="guide-content" id="darkPatternsContent">
+                        <div class="guide-section">
+                            <h3>🎯 The Manipulation Blast Radius</h3>
+                            <div class="blast-radius-intro">
+                                <p>Based on academic research, <strong>97% of popular apps use dark patterns</strong> (<abbr title="European Union Commission - The governing body of the European Union">EU</abbr> Commission, 2022). These aren't accidents—they're calculated design decisions that exploit human psychology for profit.</p>
+                                <div class="research-stats">
+                                    <div class="stat">
+                                        <span class="stat-number">$245M</span>
+                                        <span class="stat-label">Epic Games <abbr title="Federal Trade Commission - US government agency that protects consumers from deceptive business practices">FTC</abbr> Fine</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-number">$62M</span>
+                                        <span class="stat-label">Noom <abbr title="Federal Trade Commission - US government agency that protects consumers from deceptive business practices">FTC</abbr> Fine</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-number">97%</span>
+                                        <span class="stat-label">Apps Using Dark Patterns</span>
+                                    </div>
+                                </div>
+                                <div class="case-study">
+                                    <h4>📚 Epic Games Case Study</h4>
+                                    <p><strong>What they did:</strong> Made it extremely easy for kids to accidentally spend money in Fortnite using "V-Bucks" virtual currency that obscured real costs. Auto-charged credit cards without clear consent and made refunds nearly impossible.</p>
+                                    <p><strong>The impact:</strong> Children accidentally spent hundreds or thousands of dollars. Parents couldn't get refunds for unauthorized charges.</p>
+                                    <p><strong>FTC response:</strong> $245M fine + $275M additional penalty. Forced Epic to change payment systems and add easy refund processes.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="guide-section">
+                            <h3>🏢 Platform Analysis by Manipulation Type</h3>
+                            
+                            <div class="pattern-category">
+                                <h4 class="pattern-header urgency">⏰ Urgency Manipulation</h4>
+                                <div class="platform-grid">
+                                    <div class="platform-card">
+                                        <h5>Amazon</h5>
+                                        <p><strong>Tactic:</strong> "Only X left in stock" • Countdown timers</p>
+                                        <p><strong>Psychology:</strong> Creates false scarcity to bypass rational decision-making</p>
+                                    </div>
+                                    <div class="platform-card">
+                                        <h5>Booking.com</h5>
+                                        <p><strong>Tactic:</strong> "2 people looking at this hotel" • "Book in next 10 minutes"</p>
+                                        <p><strong>Psychology:</strong> FOMO + time pressure = impulsive booking</p>
+                                    </div>
+                                    <div class="platform-card">
+                                        <h5>eBay</h5>
+                                        <p><strong>Tactic:</strong> Artificial bidding wars • "Auction ending soon"</p>
+                                        <p><strong>Psychology:</strong> Competition anxiety drives up prices</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="pattern-category">
+                                <h4 class="pattern-header social">👥 Social Manipulation</h4>
+                                <div class="platform-grid">
+                                    <div class="platform-card">
+                                        <h5>Facebook/Meta</h5>
+                                        <p><strong>Tactic:</strong> "People you may know" • Emotionally charged content promotion</p>
+                                        <p><strong>Psychology:</strong> Exploits social belonging needs and emotional triggers</p>
+                                    </div>
+                                    <div class="platform-card">
+                                        <h5>LinkedIn</h5>
+                                        <p><strong>Tactic:</strong> "X viewed your profile" • Connection spam</p>
+                                        <p><strong>Psychology:</strong> Professional FOMO and curiosity exploitation</p>
+                                    </div>
+                                    <div class="platform-card">
+                                        <h5>Instagram</h5>
+                                        <p><strong>Tactic:</strong> Story view notifications • Like/comment pressure</p>
+                                        <p><strong>Psychology:</strong> Social validation addiction and FOMO</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="pattern-category">
+                                <h4 class="pattern-header complexity">🎛️ Complexity Manipulation</h4>
+                                <div class="platform-grid">
+                                    <div class="platform-card">
+                                        <h5>Netflix</h5>
+                                        <p><strong>Tactic:</strong> Multi-step cancellation • Hidden unsubscribe options</p>
+                                        <p><strong>Psychology:</strong> Friction exhaustion - people give up trying to cancel</p>
+                                    </div>
+                                    <div class="platform-card">
+                                        <h5>HP</h5>
+                                        <p><strong>Tactic:</strong> Ink subscription traps • Confusing opt-out processes</p>
+                                        <p><strong>Psychology:</strong> Cognitive overload leads to subscription acceptance</p>
+                                    </div>
+                                    <div class="platform-card">
+                                        <h5>Epic Games</h5>
+                                        <p><strong>Tactic:</strong> V-Bucks currency obfuscation • Easy spending, hard tracking</p>
+                                        <p><strong>Psychology:</strong> Breaks mental connection between spending and real money</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="guide-section">
+                            <h3>🛠️ Designer/Developer Action Items</h3>
+                            <div class="action-grid">
+                                <div class="action-card ethical">
+                                    <h4>✅ Ethical Design Principles</h4>
+                                    <ul>
+                                        <li>Make cancellation as easy as sign-up</li>
+                                        <li>Use real urgency, not manufactured scarcity</li>
+                                        <li>Clearly label all costs and commitments upfront</li>
+                                        <li>Default to user privacy and minimal data collection</li>
+                                        <li>Design for long-term user wellbeing, not short-term engagement</li>
+                                    </ul>
+                                </div>
+                                <div class="action-card warning">
+                                    <h4>⚠️ Patterns to Avoid</h4>
+                                    <ul>
+                                        <li>Roach motels (easy in, hard out)</li>
+                                        <li>Bait and switch pricing</li>
+                                        <li>Forced continuity (hard to cancel)</li>
+                                        <li>Hidden costs and fees</li>
+                                        <li>Friend spam (auto-contact uploading)</li>
+                                        <li>Confirmshaming ("No thanks, I don't want to save money")</li>
+                                    </ul>
+                                </div>
+                                <div class="action-card legal">
+                                    <h4>⚖️ Legal Considerations</h4>
+                                    <ul>
+                                        <li><abbr title="European Union">EU</abbr> Digital Services Act compliance</li>
+                                        <li><abbr title="Federal Trade Commission">FTC</abbr> deceptive practices guidelines</li>
+                                        <li><abbr title="California Consumer Privacy Act / General Data Protection Regulation">CCPA/GDPR</abbr> privacy requirements</li>
+                                        <li>Accessibility standards (<abbr title="Web Content Accessibility Guidelines">WCAG</abbr>)</li>
+                                        <li>Truth in advertising laws</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="guide-section">
+                            <h3>🔮 The Expanding Manipulation Frontier</h3>
+                            <div class="frontier-analysis">
+                                <div class="trend-card">
+                                    <h4>🤖 AI-Powered Personalization</h4>
+                                    <p>Machine learning algorithms now create <em>individualized</em> dark patterns based on your specific psychological profile and browsing history.</p>
+                                </div>
+                                <div class="trend-card">
+                                    <h4>🎮 Gamification Abuse</h4>
+                                    <p>Streak preservation, points systems, and achievement badges exploit our reward pathways to create addictive engagement loops.</p>
+                                </div>
+                                <div class="trend-card">
+                                    <h4>📱 Cross-Platform Tracking</h4>
+                                    <p>Dark patterns now follow you across devices and platforms, creating coordinated manipulation campaigns that span your entire digital life.</p>
+                                </div>
+                                <div class="trend-card">
+                                    <h4>🧠 Neuromarketing Integration</h4>
+                                    <p>Brain imaging research directly informs UI design to trigger specific neural pathways associated with purchasing and addiction.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="guide-section">
+                            <h3>🎯 Call to Action for Ethical Creators</h3>
+                            <div class="cta-section">
+                                <div class="ethics-pledge">
+                                    <h4>The Ethical Designer's Pledge</h4>
+                                    <div class="pledge-content">
+                                        <p>"I commit to designing digital experiences that respect user autonomy, promote genuine wellbeing, and prioritize human dignity over engagement metrics."</p>
+                                        <div class="pledge-actions">
+                                            <span class="pledge-item">✓ Transparent pricing and policies</span>
+                                            <span class="pledge-item">✓ Respectful default settings</span>
+                                            <span class="pledge-item">✓ Easy exit paths</span>
+                                            <span class="pledge-item">✓ Honest communication</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="resources-section">
+                                    <h4>🔗 Essential Resources</h4>
+                                    <ul class="resource-list">
+                                        <li><strong>DeceptiveDesign.org</strong> - Dark pattern identification database</li>
+                                        <li><strong>Center for Humane Technology</strong> - Ethical design principles and research</li>
+                                        <li><strong>Princeton Web Transparency Project</strong> - Academic research on dark patterns</li>
+                                        <li><strong><abbr title="European Union">EU</abbr> Digital Services Act</strong> - Legal requirements for digital platforms</li>
+                                        <li><strong><abbr title="Federal Trade Commission">FTC</abbr> Enforcement Actions</strong> - Official government penalties and guidelines</li>
+                                    </ul>
+                                </div>
+
+                        <div class="guide-section">
+                            <h3>📚 Acronym Reference</h3>
+                            <div class="acronym-guide">
+                                <div class="acronym-grid">
+                                    <div class="acronym-item">
+                                        <strong>FTC</strong>
+                                        <span>Federal Trade Commission - US government agency that protects consumers from deceptive business practices</span>
+                                    </div>
+                                    <div class="acronym-item">
+                                        <strong>EU</strong>
+                                        <span>European Union - Political and economic union of European countries</span>
+                                    </div>
+                                    <div class="acronym-item">
+                                        <strong>GDPR</strong>
+                                        <span>General Data Protection Regulation - EU privacy law protecting personal data</span>
+                                    </div>
+                                    <div class="acronym-item">
+                                        <strong>CCPA</strong>
+                                        <span>California Consumer Privacy Act - California state law giving consumers privacy rights</span>
+                                    </div>
+                                    <div class="acronym-item">
+                                        <strong>WCAG</strong>
+                                        <span>Web Content Accessibility Guidelines - Standards for making web content accessible to people with disabilities</span>
+                                    </div>
+                                    <div class="acronym-item">
+                                        <strong>UI/UX</strong>
+                                        <span>User Interface/User Experience - Design of digital interfaces and user interactions</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Built for clear thinking in an age of information warfare</p>
+        </div>
+    </div>
+
+    <script>
+        function calculateScore() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            let totalScore = 0;
+            
+            checkboxes.forEach(checkbox => {
+                totalScore += parseInt(checkbox.value);
+            });
+            
+            document.getElementById('totalScore').textContent = totalScore;
+            
+            const meaningDiv = document.getElementById('scoreMeaning');
+            meaningDiv.className = 'score-meaning';
+            
+            if (totalScore <= 3) {
+                meaningDiv.textContent = 'LOW RISK - Appears relatively straightforward';
+                meaningDiv.classList.add('score-low');
+            } else if (totalScore <= 7) {
+                meaningDiv.textContent = 'MEDIUM RISK - Apply extra scrutiny';
+                meaningDiv.classList.add('score-medium');
+            } else {
+                meaningDiv.textContent = 'HIGH RISK - Proceed with significant caution';
+                meaningDiv.classList.add('score-high');
+            }
+        }
+        
+        function resetChecklist() {
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            calculateScore();
+        }
+        
+        function toggleAdvancedGuide() {
+            const content = document.getElementById('advancedGuideContent');
+            const icon = document.getElementById('expandIcon');
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                icon.textContent = '▼';
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('expanded');
+                icon.textContent = '▲';
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+        
+        function toggleDarkPatternsGuide() {
+            const content = document.getElementById('darkPatternsContent');
+            const icon = document.getElementById('darkPatternsIcon');
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                icon.textContent = '▼';
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('expanded');
+                icon.textContent = '▲';
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+        
+        // Add event listeners to all checkboxes
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', calculateScore);
+        });
+        
+        // Initialize score
+        calculateScore();
+    </script>
+</body>
+</html>
