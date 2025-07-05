@@ -191,8 +191,31 @@
             font-size: 0.9rem;
         }
 
+        .legal-disclaimers {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #4a5f7a;
+        }
+
+        .legal-disclaimers p {
+            font-size: 0.75rem;
+            color: #bdc3c7;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .legal-disclaimers a {
+            color: #74b9ff;
+            text-decoration: none;
+        }
+
+        .legal-disclaimers a:hover {
+            color: #0984e3;
+            text-decoration: underline;
+        }
+
         /* Advanced Guide Styles */
-        .advanced-guide, .dark-patterns-guide {
+        .advanced-guide, .dark-patterns-guide, .psychology-guide {
             background: #f8f9fa;
             border: 2px solid #e9ecef;
             border-radius: 10px;
@@ -211,6 +234,19 @@
 
         .dark-patterns-guide .guide-header:hover {
             background: linear-gradient(135deg, #c82333, #e8690b);
+        }
+
+        .psychology-guide .guide-header {
+            background: linear-gradient(135deg, #6f42c1, #e83e8c);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.3s ease;
+        }
+
+        .psychology-guide .guide-header:hover {
+            background: linear-gradient(135deg, #5e369b, #d91a72);
         }
 
         .guide-header {
@@ -243,7 +279,7 @@
             font-style: italic;
         }
 
-        #expandIcon, #darkPatternsIcon {
+        #expandIcon, #darkPatternsIcon, #psychologyIcon {
             font-size: 1.2rem;
             transition: transform 0.3s ease;
             font-weight: bold;
@@ -257,7 +293,255 @@
         }
 
         .guide-content.expanded {
-            max-height: 5000px;
+            max-height: 8000px;
+        }
+
+        /* Psychology-specific styles */
+        .theory-category {
+            margin-bottom: 30px;
+        }
+
+        .theory-header {
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .theory-header.cognitive {
+            background: #e1f5fe;
+            color: #01579b;
+            border-left: 4px solid #0288d1;
+        }
+
+        .theory-header.behavioral {
+            background: #f3e5f5;
+            color: #4a148c;
+            border-left: 4px solid #7b1fa2;
+        }
+
+        .theory-header.social {
+            background: #e8f5e8;
+            color: #1b5e20;
+            border-left: 4px solid #388e3c;
+        }
+
+        .theory-header.attention {
+            background: #fff3e0;
+            color: #e65100;
+            border-left: 4px solid #ff9800;
+        }
+
+        .psychology-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .psychology-card h5 {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 0;
+            color: #2c5282;
+            font-size: 1rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .theory-details {
+            padding: 20px;
+        }
+
+        .theory-details p {
+            margin: 8px 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .theory-details ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .theory-details li {
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .cialdini-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .principle {
+            background: #f0fff4;
+            border-left: 3px solid #48bb78;
+            padding: 10px;
+            border-radius: 0 5px 5px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .principle strong {
+            color: #22543d;
+            font-size: 0.9rem;
+        }
+
+        .principle span {
+            color: #4a5568;
+            font-size: 0.8rem;
+        }
+
+        .testing-methodology {
+            display: grid;
+            gap: 25px;
+        }
+
+        .method-card {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .method-card h4 {
+            color: #2c5282;
+            margin: 0 0 20px 0;
+            font-size: 1.1rem;
+        }
+
+        .measures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .measure {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #4299e1;
+        }
+
+        .measure strong {
+            display: block;
+            color: #2c5282;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .measure ul {
+            margin: 0;
+            padding-left: 15px;
+        }
+
+        .measure li {
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+            color: #4a5568;
+        }
+
+        .ab-testing-framework {
+            display: grid;
+            gap: 15px;
+        }
+
+        .test-scenario {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #ed8936;
+        }
+
+        .test-scenario h5 {
+            color: #c05621;
+            margin: 0 0 10px 0;
+            font-size: 0.95rem;
+        }
+
+        .test-scenario p {
+            margin: 3px 0;
+            font-size: 0.85rem;
+            color: #4a5568;
+        }
+
+        .research-references {
+            display: grid;
+            gap: 25px;
+        }
+
+        .reference-category h4 {
+            color: #2c5282;
+            margin: 0 0 15px 0;
+            font-size: 1.1rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+
+        .reference-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .reference-list li {
+            background: #f7fafc;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            border-left: 3px solid #4299e1;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .testing-checklist {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .checklist-category {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .checklist-category h4 {
+            color: #2c5282;
+            margin: 0 0 15px 0;
+            font-size: 1rem;
+        }
+
+        .testing-items {
+            display: grid;
+            gap: 10px;
+        }
+
+        .testing-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 8px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        .testing-item:hover {
+            background: white;
+        }
+
+        .testing-item input[type="checkbox"] {
+            margin: 0;
+            transform: scale(1.1);
         }
 
         .guide-section {
@@ -742,6 +1026,18 @@
             .acronym-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .measures-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cialdini-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .testing-checklist {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 600px) {
@@ -1210,10 +1506,266 @@
                     </div>
                 </div>
             </div>
+
+            <div class="section">
+                <div class="psychology-guide">
+                    <div class="guide-header" onclick="togglePsychologyGuide()">
+                        <h2>🧠 Psychology Behind the Manipulation</h2>
+                        <div class="expand-indicator">
+                            <span id="psychologyIcon">▼</span>
+                            <span class="guide-subtitle">Scientific foundation • Lab testing framework • Academic credibility • Click to expand</span>
+                        </div>
+                    </div>
+                    
+                    <div class="guide-content" id="psychologyContent">
+                        <div class="guide-section">
+                            <h3>🧬 Core Psychological Theories Exploited by Dark Patterns</h3>
+                            
+                            <div class="psychology-category">
+                                <h4 class="psychology-header behavioral">⚡ Behavioral Psychology (B.F. Skinner)</h4>
+                                <div class="psychology-explanations">
+                                    <div class="psychology-item">
+                                        <strong>Gamification abuse</strong> = Operant conditioning/variable reward schedules
+                                        <span>Example: Social media likes, loot boxes, achievement systems</span>
+                                    </div>
+                                    <div class="psychology-item">
+                                        <strong>Streak preservation</strong> = Behavioral reinforcement patterns
+                                        <span>Example: Snapchat streaks, Duolingo daily goals, fitness app chains</span>
+                                    </div>
+                                    <div class="psychology-item">
+                                        <strong>Achievement badges</strong> = Token economy systems
+                                        <span>Example: LinkedIn skill endorsements, gaming achievements, progress bars</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="psychology-category">
+                                <h4 class="psychology-header cognitive">🧮 Cognitive Psychology (Kahneman/Tversky)</h4>
+                                <div class="psychology-explanations">
+                                    <div class="psychology-item">
+                                        <strong>Urgency manipulation</strong> = Exploiting System 1 (fast) vs System 2 (slow) thinking
+                                        <span>Example: Countdown timers, "limited time offers," flash sales</span>
+                                    </div>
+                                    <div class="psychology-item">
+                                        <strong>False scarcity</strong> = Availability heuristic bias
+                                        <span>Example: "Only 2 left in stock," fake inventory counters</span>
+                                    </div>
+                                    <div class="psychology-item">
+                                        <strong>Complex solutions</strong> = Cognitive load manipulation
+                                        <span>Example: Confusing cancellation processes, hidden opt-out options</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="psychology-category">
+                                <h4 class="psychology-header social">👥 Social Psychology (Robert Cialdini)</h4>
+                                <div class="psychology-explanations">
+                                    <div class="psychology-item">
+                                        <strong>In-group framing</strong> = Social identity theory
+                                        <span>Example: "People like you," exclusive membership language</span>
+                                    </div>
+                                    <div class="psychology-item">
+                                        <strong>"People like us"</strong> = Social proof principle
+                                        <span>Example: "147 people viewed this," customer testimonials</span>
+                                    </div>
+                                    <div class="psychology-item">
+                                        <strong>Authority positioning</strong> = Authority bias exploitation
+                                        <span>Example: Expert endorsements, official-looking badges, certifications</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="psychology-category">
+                                <h4 class="psychology-header persuasion">🎯 Persuasion Psychology</h4>
+                                <div class="psychology-explanations">
+                                    <div class="psychology-item">
+                                        <strong>False binaries</strong> = Reactance theory
+                                        <span>Example: "Accept all cookies or leave," limited choice options</span>
+                                    </div>
+                                    <div class="psychology-item">
+                                        <strong>Flattery hooks</strong> = Self-enhancement bias
+                                        <span>Example: "Smart people choose," "You're too intelligent for..."</span>
+                                    </div>
+                                    <div class="psychology-item">
+                                        <strong>FOMO tactics</strong> = Loss aversion (Prospect Theory)
+                                        <span>Example: "Don't miss out," event countdowns, limited access</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="psychology-category">
+                                <h4 class="psychology-header attention">🎯 Attention Psychology</h4>
+                                <div class="psychology-explanations">
+                                    <div class="psychology-item">
+                                        <strong>Infinite scroll</strong> = Variable ratio reinforcement
+                                        <span>Example: Social media feeds, news sites, video platforms</span>
+                                    </div>
+                                    <div class="psychology-item">
+                                        <strong>Notification systems</strong> = Intermittent reinforcement
+                                        <span>Example: Push notifications, email alerts, app badges</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="guide-section">
+                            <h3>🔬 Academic Foundation & Research</h3>
+                            <div class="academic-foundation">
+                                <div class="foundation-card">
+                                    <h4>📚 Cialdini's 6 Principles of Persuasion</h4>
+                                    <div class="cialdini-principles">
+                                        <div class="principle-item">
+                                            <strong>1. Reciprocity:</strong> "Free" trials that auto-charge
+                                        </div>
+                                        <div class="principle-item">
+                                            <strong>2. Commitment:</strong> Public sharing requirements
+                                        </div>
+                                        <div class="principle-item">
+                                            <strong>3. Social Proof:</strong> Fake user counts, reviews
+                                        </div>
+                                        <div class="principle-item">
+                                            <strong>4. Authority:</strong> Expert endorsements, badges
+                                        </div>
+                                        <div class="principle-item">
+                                            <strong>5. Liking:</strong> Attractive design for trust
+                                        </div>
+                                        <div class="principle-item">
+                                            <strong>6. Scarcity:</strong> Artificial inventory limits
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="foundation-card">
+                                    <h4>🧠 Kahneman's System 1/2 Thinking</h4>
+                                    <div class="kahneman-systems">
+                                        <div class="system-explanation">
+                                            <strong>System 1 (Fast):</strong> Automatic, emotional, impulsive
+                                            <span>Dark patterns target this: urgency, emotional triggers, one-click purchases</span>
+                                        </div>
+                                        <div class="system-explanation">
+                                            <strong>System 2 (Slow):</strong> Deliberate, logical, reflective
+                                            <span>Ethical design supports this: clear information, time to think, easy comparisons</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="foundation-card">
+                                    <h4>📊 Behavioral Economics Concepts</h4>
+                                    <div class="economics-concepts">
+                                        <div class="concept-item">
+                                            <strong>Loss Aversion:</strong> Fear of losing more powerful than potential gain
+                                        </div>
+                                        <div class="concept-item">
+                                            <strong>Anchoring:</strong> Over-rely on first piece of information
+                                        </div>
+                                        <div class="concept-item">
+                                            <strong>Availability Bias:</strong> Judge probability by ease of recall
+                                        </div>
+                                        <div class="concept-item">
+                                            <strong>Choice Overload:</strong> Too many options reduce decision quality
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="guide-section">
+                            <h3>🧪 Lab Testing Framework for Developers</h3>
+                            <div class="testing-framework">
+                                <div class="testing-card">
+                                    <h4>⚗️ A/B Testing for Dark Pattern Detection</h4>
+                                    <div class="testing-scenarios">
+                                        <div class="scenario">
+                                            <strong>Control:</strong> Standard product page
+                                            <strong>Variable:</strong> "Only 3 left!" urgency message
+                                            <strong>Measure:</strong> Decision time, stress indicators, post-purchase regret
+                                        </div>
+                                        <div class="scenario">
+                                            <strong>Control:</strong> Clear, simple checkout
+                                            <strong>Variable:</strong> Complex multi-step process with hidden fees
+                                            <strong>Measure:</strong> Completion rate, user confusion, satisfaction scores
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="testing-card">
+                                    <h4>📈 Key Metrics to Track</h4>
+                                    <div class="metrics-list">
+                                        <div class="metric-item">
+                                            <strong>Cognitive Load:</strong> Time to complete tasks, error rates
+                                        </div>
+                                        <div class="metric-item">
+                                            <strong>Emotional State:</strong> Stress indicators, satisfaction surveys
+                                        </div>
+                                        <div class="metric-item">
+                                            <strong>Decision Quality:</strong> Post-decision regret, return rates
+                                        </div>
+                                        <div class="metric-item">
+                                            <strong>Long-term Impact:</strong> User retention vs. exploitation patterns
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="guide-section">
+                            <h3>🎓 Research References</h3>
+                            <div class="research-refs">
+                                <div class="ref-category">
+                                    <h4>📖 Foundational Studies</h4>
+                                    <ul>
+                                        <li><strong>Kahneman, D.</strong> (2011). <em>Thinking, Fast and Slow</em></li>
+                                        <li><strong>Cialdini, R.</strong> (1984). <em>Influence: The Psychology of Persuasion</em></li>
+                                        <li><strong>Thaler, R. & Sunstein, C.</strong> (2008). <em>Nudge</em></li>
+                                        <li><strong>Skinner, B.F.</strong> (1938). <em>The Behavior of Organisms</em></li>
+                                    </ul>
+                                </div>
+                                <div class="ref-category">
+                                    <h4>🔬 Contemporary Research</h4>
+                                    <ul>
+                                        <li><strong>Harris, T.</strong> (Center for Humane Technology): Attention economy research</li>
+                                        <li><strong>Princeton Web Transparency Project:</strong> Dark pattern studies</li>
+                                        <li><strong>Mathur, A. et al.</strong> (2019): Dark Patterns at Scale study</li>
+                                        <li><strong>EU Commission</strong> (2022): Behavioral study on digital practices</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="guide-section">
+                            <h3>💡 Benefits of Making Psychology Explicit</h3>
+                            <div class="benefits-analysis">
+                                <div class="benefits-pros">
+                                    <h4>✅ Advantages</h4>
+                                    <ul>
+                                        <li><strong>Academic credibility</strong> - Citations from established research</li>
+                                        <li><strong>Deeper understanding</strong> - Users learn why manipulation works</li>
+                                        <li><strong>Educational completeness</strong> - Comprehensive resource for learning</li>
+                                        <li><strong>Stronger legal defense</strong> - Evidence-based claims</li>
+                                        <li><strong>Developer education</strong> - Framework for ethical testing</li>
+                                    </ul>
+                                </div>
+                                <div class="benefits-considerations">
+                                    <h4>⚠️ Considerations</h4>
+                                    <ul>
+                                        <li><strong>Complexity management</strong> - Keep accessible to general users</li>
+                                        <li><strong>Academic balance</strong> - Don't intimidate casual learners</li>
+                                        <li><strong>Focus maintenance</strong> - Support practical tool use</li>
+                                        <li><strong>Ethical responsibility</strong> - Don't enable malicious usage</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="footer">
             <p>Built for clear thinking in an age of information warfare</p>
+            <div class="legal-disclaimers">
+                <p>Educational purposes only • Based on public records and research • <a href="mailto:va@vipulanand.in">Contact us for corrections</a></p>
+            </div>
         </div>
     </div>
 
@@ -1268,6 +1820,36 @@
         function toggleDarkPatternsGuide() {
             const content = document.getElementById('darkPatternsContent');
             const icon = document.getElementById('darkPatternsIcon');
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                icon.textContent = '▼';
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('expanded');
+                icon.textContent = '▲';
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+        
+        function togglePsychologyGuide() {
+            const content = document.getElementById('psychologyContent');
+            const icon = document.getElementById('psychologyIcon');
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                icon.textContent = '▼';
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('expanded');
+                icon.textContent = '▲';
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+        
+        function togglePsychologyGuide() {
+            const content = document.getElementById('psychologyContent');
+            const icon = document.getElementById('psychologyIcon');
             
             if (content.classList.contains('expanded')) {
                 content.classList.remove('expanded');
