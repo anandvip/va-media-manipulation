@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Patterns Lab - UI/UX Ethics Training</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            padding: 30px;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Responsive Navigation */
+        .nav-container {
+            position: relative;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .burger-menu {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            padding: 15px 20px;
+            cursor: pointer;
+            color: #8b5cf6;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            padding: 5px;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 15px 20px;
+            margin: 5px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            color: #666;
+            white-space: nowrap;
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+            color: white;
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Collapsible Panels */
+        .collapsible {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .collapsible-header {
+            background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+            color: white;
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .collapsible-header:hover {
+            opacity: 0.9;
+        }
+
+        .collapsible-content {
+            padding: 20px;
+            display: none;
+        }
+
+        .collapsible-content.active {
+            display: block;
+        }
+
+        .collapsible-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-arrow.rotated {
+            transform: rotate(180deg);
+        }
+
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .pattern-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .pattern-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .pattern-card.evil {
+            border-color: #ef4444;
+        }
+
+        .pattern-card.good {
+            border-color: #10b981;
+        }
+
+        .pattern-header {
+            padding: 20px;
+            font-weight: bold;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .evil .pattern-header {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .good .pattern-header {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .pattern-demo {
+            padding: 30px;
+            background: #f8fafc;
+            min-height: 200px;
+        }
+
+        .pattern-explanation {
+            padding: 20px;
+            background: #f1f5f9;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .fake-website {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .fake-button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .primary-btn {
+            background: #3b82f6;
+            color: white;
+            font-weight: bold;
+        }
+
+        .secondary-btn {
+            background: #e5e7eb;
+            color: #6b7280;
+            font-size: 0.8em;
+        }
+
+        .deceptive-btn {
+            background: #10b981;
+            color: white;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        .tiny-btn {
+            background: none;
+            border: 1px solid #d1d5db;
+            color: #6b7280;
+            font-size: 0.7em;
+            padding: 5px 10px;
+        }
+
+        .ethical-btn {
+            background: #3b82f6;
+            color: white;
+            font-weight: normal;
+            border: 1px solid #3b82f6;
+        }
+
+        .ethical-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+            font-weight: normal;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .checkbox-container {
+            margin: 15px 0;
+        }
+
+        .deceptive-checkbox {
+            margin-right: 10px;
+        }
+
+        .subscription-box {
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px 0;
+        }
+
+        .price-highlight {
+            font-size: 2em;
+            font-weight: bold;
+            color: #ef4444;
+        }
+
+        .small-text {
+            font-size: 0.7em;
+            color: #6b7280;
+        }
+
+        .hidden-costs {
+            font-size: 0.6em;
+            color: #9ca3af;
+            margin-top: 5px;
+        }
+
+        /* Quiz Styling */
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quiz-progress {
+            background: #e5e7eb;
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .quiz-progress-bar {
+            background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .quiz-question-container {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .quiz-question-container.active {
+            display: block;
+        }
+
+        .quiz-question {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #1e293b;
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 15px;
+        }
+
+        .quiz-option {
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .quiz-option:hover {
+            border-color: #8b5cf6;
+            background: #f8fafc;
+            transform: translateY(-2px);
+        }
+
+        .quiz-option.correct {
+            border-color: #10b981;
+            background: #ecfdf5;
+            animation: correctPulse 0.5s ease;
+        }
+
+        .quiz-option.incorrect {
+            border-color: #ef4444;
+            background: #fef2f2;
+            animation: shake 0.5s ease;
+        }
+
+        .quiz-option.disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .quiz-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0;
+        }
+
+        .quiz-nav-button {
+            background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .quiz-nav-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .quiz-score {
+            text-align: center;
+            font-size: 1.1em;
+            color: #6b7280;
+        }
+
+        /* Celebration Animation */
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(139, 92, 246, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .celebration.active {
+            display: flex;
+        }
+
+        .celebration-content {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            animation: bounceIn 0.8s ease;
+        }
+
+        .celebration-emoji {
+            font-size: 4em;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% { transform: translateY(0); }
+            40%, 43% { transform: translateY(-30px); }
+            70% { transform: translateY(-15px); }
+            90% { transform: translateY(-4px); }
+        }
+
+        .ethics-principle {
+            background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .case-study {
+            background: #f1f5f9;
+            border-left: 5px solid #8b5cf6;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .progress-bar {
+            background: #e5e7eb;
+            height: 10px;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5em;
+            }
+            
+            .pattern-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .burger-menu {
+                display: block;
+            }
+            
+            .nav-tabs {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.98);
+                border-radius: 0 0 15px 15px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                z-index: 100;
+            }
+            
+            .nav-tabs.active {
+                display: flex;
+            }
+            
+            .tab-button {
+                text-align: left;
+                border-radius: 0;
+                margin: 0;
+                padding: 20px;
+                border-bottom: 1px solid #e2e8f0;
+            }
+            
+            .tab-content {
+                padding: 20px;
+            }
+            
+            .quiz-navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 20px 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .pattern-demo {
+                padding: 15px;
+            }
+            
+            .quiz-question-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧠 Dark Patterns Educational Lab</h1>
+            <p>Learn to identify, understand, and avoid manipulative design patterns. Build ethical UI/UX skills through hands-on examples and interactive exercises.</p>
+        </div>
+
+        <div class="nav-container">
+            <button class="burger-menu" onclick="toggleMenu()">☰</button>
+            <div class="nav-tabs" id="navTabs">
+                <button class="tab-button active" onclick="showTab('overview')">📚 Overview</button>
+                <button class="tab-button" onclick="showTab('examples')">🔍 Live Examples</button>
+                <button class="tab-button" onclick="showTab('quiz')">🎯 Recognition Quiz</button>
+                <button class="tab-button" onclick="showTab('ethics')">⚖️ Ethical Guidelines</button>
+                <button class="tab-button" onclick="showTab('cases')">📊 Case Studies</button>
+            </div>
+        </div>
+
+        <div id="overview" class="tab-content active">
+            <h2>Understanding Dark Patterns in UI/UX Design</h2>
+            
+            <div class="ethics-principle">
+                <h3>🎯 Learning Objectives</h3>
+                <div style="margin-top: 20px;">
+                    <strong>By the end of this lab, you will:</strong>
+                    <ul style="margin-top: 15px; padding-left: 20px;">
+                        <li>Identify 15+ types of common dark patterns</li>
+                        <li>Understand the psychological mechanisms behind manipulation</li>
+                        <li>Practice spotting deceptive design in real interfaces</li>
+                        <li>Learn to design ethical alternatives</li>
+                        <li>Develop a framework for ethical design decisions</li>
+                        <li>Recognize the business case for ethical design</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <span>📖 What Are Dark Patterns?</span>
+                    <span class="collapsible-arrow">▼</span>
+                </div>
+                <div class="collapsible-content">
+                    <p style="margin: 20px 0;">Dark patterns are user interfaces designed to trick users into doing things they didn't intend to do. They exploit cognitive biases and psychological vulnerabilities to benefit the business at the user's expense.</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0;">
+                        <div style="background: #fef2f2; padding: 20px; border-radius: 10px; border-left: 5px solid #ef4444;">
+                            <h4>❌ Dark Pattern Characteristics</h4>
+                            <ul style="margin-top: 10px;">
+                                <li>Deceive users intentionally</li>
+                                <li>Benefit company over user</li>
+                                <li>Exploit psychological vulnerabilities</li>
+                                <li>Make unwanted actions easy</li>
+                                <li>Hide important information</li>
+                            </ul>
+                        </div>
+                        <div style="background: #ecfdf5; padding: 20px; border-radius: 10px; border-left: 5px solid #10b981;">
+                            <h4>✅ Ethical Design Principles</h4>
+                            <ul style="margin-top: 10px;">
+                                <li>Transparent and honest</li>
+                                <li>User's best interest first</li>
+                                <li>Respect user autonomy</li>
+                                <li>Clear and understandable</li>
+                                <li>Easy to undo actions</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <span>🧭 Types of Dark Patterns</span>
+                    <span class="collapsible-arrow">▼</span>
+                </div>
+                <div class="collapsible-content">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                        <div style="background: #fff7ed; padding: 15px; border-radius: 8px; border-left: 3px solid #f59e0b;">
+                            <strong>Confirm-shaming</strong><br>
+                            <small>Using guilt to pressure decisions</small>
+                        </div>
+                        <div style="background: #fef3c7; padding: 15px; border-radius: 8px; border-left: 3px solid #f59e0b;">
+                            <strong>Hidden Costs</strong><br>
+                            <small>Revealing charges at checkout</small>
+                        </div>
+                        <div style="background: #fee2e2; padding: 15px; border-radius: 8px; border-left: 3px solid #ef4444;">
+                            <strong>Bait & Switch</strong><br>
+                            <small>Promising one thing, delivering another</small>
+                        </div>
+                        <div style="background: #f3e8ff; padding: 15px; border-radius: 8px; border-left: 3px solid #8b5cf6;">
+                            <strong>Privacy Zuckering</strong><br>
+                            <small>Tricking users into sharing data</small>
+                        </div>
+                        <div style="background: #e0f2fe; padding: 15px; border-radius: 8px; border-left: 3px solid #06b6d4;">
+                            <strong>Forced Continuity</strong><br>
+                            <small>Making cancellation difficult</small>
+                        </div>
+                        <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; border-left: 3px solid #22c55e;">
+                            <strong>Friend Spam</strong><br>
+                            <small>Requesting access then spamming contacts</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 25%;"></div>
+            </div>
+            <p style="text-align: center; color: #6b7280;">Course Progress: Module 1 of 4</p>
+        </div>
+
+        <div id="examples" class="tab-content">
+            <h2>Interactive Dark Pattern Examples</h2>
+            <p style="margin-bottom: 30px;">Compare manipulative designs with their ethical alternatives. Click and interact with these examples to understand how they work.</p>
+
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <span>😰 Confirm-shaming Examples</span>
+                    <span class="collapsible-arrow">▼</span>
+                </div>
+                <div class="collapsible-content">
+                    <div class="pattern-grid">
+                        <div class="pattern-card evil">
+                            <div class="pattern-header">
+                                <span>❌ DARK PATTERN: Confirm-shaming</span>
+                            </div>
+                            <div class="pattern-demo">
+                                <div class="fake-website">
+                                    <h4>🎉 Exclusive Limited Time Offer!</h4>
+                                    <p>Join 50,000+ smart people who save money daily!</p>
+                                    <button class="deceptive-btn">YES! I want to save money!</button>
+                                    <br><br>
+                                    <button class="tiny-btn">No thanks, I prefer wasting money</button>
+                                </div>
+                            </div>
+                            <div class="pattern-explanation">
+                                <strong>How it manipulates:</strong> Makes declining feel shameful or stupid. Uses negative language to pressure users into compliance.
+                            </div>
+                        </div>
+
+                        <div class="pattern-card good">
+                            <div class="pattern-header">
+                                <span>✅ ETHICAL ALTERNATIVE</span>
+                            </div>
+                            <div class="pattern-demo">
+                                <div class="fake-website">
+                                    <h4>Newsletter Signup</h4>
+                                    <p>Get weekly tips on saving money and smart shopping.</p>
+                                    <button class="ethical-btn">Subscribe to Newsletter</button>
+                                    <br><br>
+                                    <button class="ethical-secondary">Maybe Later</button>
+                                </div>
+                            </div>
+                            <div class="pattern-explanation">
+                                <strong>Why it's better:</strong> Neutral language, equal visual weight for both options, clear value proposition without pressure.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <span>💰 Hidden Costs & Pricing Tricks</span>
+                    <span class="collapsible-arrow">▼</span>
+                </div>
+                <div class="collapsible-content">
+                    <div class="pattern-grid">
+                        <div class="pattern-card evil">
+                            <div class="pattern-header">
+                                <span>❌ DARK PATTERN: Hidden Costs</span>
+                            </div>
+                            <div class="pattern-demo">
+                                <div class="fake-website">
+                                    <div class="subscription-box">
+                                        <h4>Premium Plan</h4>
+                                        <div class="price-highlight">$9.99</div>
+                                        <div class="small-text">per month*</div>
+                                        <button class="primary-btn">Start Free Trial</button>
+                                        <div class="hidden-costs">*After 3-day trial. Auto-renews annually at $199.99. Cancellation requires phone call during business hours.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pattern-explanation">
+                                <strong>How it manipulates:</strong> Hides true costs in tiny text, emphasizes low monthly price while charging annually.
+                            </div>
+                        </div>
+
+                        <div class="pattern-card good">
+                            <div class="pattern-header">
+                                <span>✅ ETHICAL ALTERNATIVE</span>
+                            </div>
+                            <div class="pattern-demo">
+                                <div class="fake-website">
+                                    <div class="subscription-box">
+                                        <h4>Premium Plan</h4>
+                                        <div style="font-size: 1.5em; font-weight: bold; color: #374151;">$199.99/year</div>
+                                        <div style="color: #6b7280;">($16.67/month, billed annually)</div>
+                                        <div style="margin: 15px 0; padding: 10px; background: #f3f4f6; border-radius: 5px;">
+                                            <strong>3-day free trial</strong><br>
+                                            Cancel anytime online
+                                        </div>
+                                        <button class="primary-btn">Start Free Trial</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pattern-explanation">
+                                <strong>Why it's better:</strong> Clear annual pricing, prominent cancellation info, transparent trial terms.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <span>🎯 Pre-selected Options & Forced Choices</span>
+                    <span class="collapsible-arrow">▼</span>
+                </div>
+                <div class="collapsible-content">
+                    <div class="pattern-grid">
+                        <div class="pattern-card evil">
+                            <div class="pattern-header">
+                                <span>❌ DARK PATTERN: Pre-selected Options</span>
+                            </div>
+                            <div class="pattern-demo">
+                                <div class="fake-website">
+                                    <h4>Complete Your Order</h4>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" checked class="deceptive-checkbox">
+                                        <span>Add Express Shipping (+$15.99)</span>
+                                    </div>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" checked class="deceptive-checkbox">
+                                        <span>Subscribe to Premium Support (+$9.99/month)</span>
+                                    </div>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" checked class="deceptive-checkbox">
+                                        <span>Join our newsletter for exclusive offers</span>
+                                    </div>
+                                    <button class="primary-btn">Complete Purchase - $47.98</button>
+                                </div>
+                            </div>
+                            <div class="pattern-explanation">
+                                <strong>How it manipulates:</strong> Pre-selects expensive add-ons, banking on users not noticing or being too lazy to uncheck.
+                            </div>
+                        </div>
+
+                        <div class="pattern-card good">
+                            <div class="pattern-header">
+                                <span>✅ ETHICAL ALTERNATIVE</span>
+                            </div>
+                            <div class="pattern-demo">
+                                <div class="fake-website">
+                                    <h4>Shipping Options</h4>
+                                    <div class="checkbox-container">
+                                        <input type="radio" name="shipping" checked> Standard Shipping (Free)
+                                    </div>
+                                    <div class="checkbox-container">
+                                        <input type="radio" name="shipping"> Express Shipping (+$15.99)
+                                    </div>
+                                    <hr style="margin: 15px 0;">
+                                    <div class="checkbox-container">
+                                        <input type="checkbox"> Add Premium Support (+$9.99/month)
+                                    </div>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox"> Subscribe to newsletter
+                                    </div>
+                                    <button class="primary-btn">Complete Purchase - $22.00</button>
+                                </div>
+                            </div>
+                            <div class="pattern-explanation">
+                                <strong>Why it's better:</strong> Nothing pre-selected, clear pricing, logical grouping of options.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="quiz" class="tab-content">
+            <div class="quiz-container">
+                <h2>Pattern Recognition Quiz</h2>
+                <p style="margin-bottom: 30px;">Test your ability to spot dark patterns. This comprehensive quiz will challenge your understanding of manipulative design.</p>
+
+                <div class="quiz-progress">
+                    <div class="quiz-progress-bar" id="quizProgress"></div>
+                </div>
+                <div class="quiz-score">
+                    Question <span id="currentQuestion">1</span> of 8 | Score: <span id="quizScore">0</span>/8
+                </div>
+
+                <!-- Question 1 -->
+                <div class="quiz-question-container active" data-question="1">
+                    <div class="quiz-question">Which of these signup forms contains a dark pattern?</div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="selectAnswer(this, false)">
+                            <strong>Form A:</strong> "Join Newsletter" / "No thanks" - both buttons same size, neutral colors
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(this, true)">
+                            <strong>Form B:</strong> "YES! Send me deals!" / "No, I hate saving money" - first button large and green, second tiny and gray
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(this, false)">
+                            <strong>Form C:</strong> "Subscribe" / "Skip" - similar styling, clear language
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; color: #6b7280; font-style: italic;">
+                        💡 Look for confirm-shaming language and visual manipulation
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="quiz-question-container" data-question="2">
+                    <div class="quiz-question">What makes this pricing display problematic?</div>
+                    <div style="border: 2px solid #e5e7eb; padding: 20px; margin: 20px 0; border-radius: 10px; background: #f9fafb;">
+                        <h4>Pro Plan - <span style="font-size: 2.5em; color: #ef4444;">$1</span>/month*</h4>
+                        <button style="background: #10b981; color: white; padding: 15px 30px; border: none; border-radius: 5px; font-size: 1.1em;">Get Started Now!</button>
+                        <div style="font-size: 0.6em; color: #9ca3af; margin-top: 15px;">*First month only, then $49.99/month. 12-month commitment required. Early cancellation fee $199.</div>
+                    </div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="selectAnswer(this, false)">
+                            The green button color creates urgency
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(this, true)">
+                            Hidden costs in tiny text with misleading headline price
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(this, false)">
+                            The "Pro Plan" naming is confusing
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="quiz-question-container" data-question="3">
+                    <div class="quiz-question">Identify the manipulation technique in this checkout flow:</div>
+                    <div style="border: 2px solid #e5e7eb; padding: 20px; margin: 20px 0; border-radius: 10px; background: #f9fafb;">
+                        <h4>🎉 Limited Time: Only 3 left in stock!</h4>
+                        <p style="color: #ef4444; font-weight: bold;">⏰ 47 other people are viewing this item</p>
+                        <p style="color: #f59e0b;">🔥 12 people bought this in the last hour</p>
+                        <button style="background: #ef4444; color: white; padding: 15px 30px; border: none; border-radius: 5px; animation: pulse 1s infinite;">BUY NOW - DON'T MISS OUT!</button>
+                    </div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="selectAnswer(this, false)">
+                            Poor color scheme and design
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(this, true)">
+                            False urgency and fake social proof manipulation
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(this, false)">
+                            Too much information presented at once
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="quiz-question-container" data-question="4">
+                    <div class="quiz-question">What's wrong with this app permission request?</div>
+                    <div style="border: 2px solid #e5e7eb; padding: 20px; margin: 20px 0; border-radius: 10px; background: #f9fafb;">
+                        <h4>📱 PhotoEditor wants to access:</h4>
+                        <div style="margin: 15px 0;">
+                            <input type="checkbox" checked disabled> 📷 Camera (Required for photo editing)
+                            <br><br>
+                            <input type="checkbox" checked disabled> 📁 Photo Library (Required for editing)
+                            <br><br>
+                            <input type="checkbox" checked> 📞 Contacts (For sharing photos with friends)
+                            <br><br>
+                            <input type="checkbox" checked> 📍 Location (For better photo recommendations)
+                            <br><br>
+                            <input type="checkbox" checked> 🎤 Microphone (For enhanced features)
+                        </div>
+                        <button style="background: #3b82f6; color: white; padding: 15px 30px; border: none; border-radius: 5px;">Allow All & Continue</button>
+                    </div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="selectAnswer(this, false)">
+                            Too many permissions requested at once
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(this, true)">
+                            Privacy Zuckering - requesting unnecessary permissions with vague justifications
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(this, false)">
+                            The interface design is confusing
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="quiz-question-container" data-question="5">
+                    <div class="quiz-question">Spot the deceptive practice in this subscription cancellation:</div>
+                    <div style="border: 2px solid #e5e7eb; padding: 20px; margin: 20px 0; border-radius: 10px; background: #f9fafb;">
+                        <h4>😢 We're sorry to see you go!</h4>
+                        <p>Before you cancel, here's what you'll lose:</p>
+                        <ul style="color: #ef4444; margin: 10px 0;">
+                            <li>❌ Access to premium features</li>
+                            <li>❌ Priority customer support</li>
+                            <li>❌ Your saved preferences</li>
+                        </ul>
+                        <div style="margin: 20px 0;">
+                            <button style="background: #10b981; color: white; padding: 15px 30px; border: none; border-radius: 5px; font-size: 1.2em;">Keep My Account</button>
+                            <button style="background: #f3f4f6; color: #9ca3af; padding: 8px 16px; border: 1px solid #d1d5db; border-radius: 3px; font-size: 0.8em; margin-left: 20px;">Proceed with cancellation</button>
+                        </div>
+                    </div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="selectAnswer(this, false)">
+                            The emotional appeal is inappropriate
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(this, true)">
+                            Unequal button treatment - making cancellation harder to find and use
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(this, false)">
+                            Too much information about what will be lost
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 6 -->
+                <div class="quiz-question-container" data-question="6">
+                    <div class="quiz-question">What's manipulative about this "free" trial signup?</div>
+                    <div style="border: 2px solid #e5e7eb; padding: 20px; margin: 20px 0; border-radius: 10px; background: #f9fafb;">
+                        <h4>🎁 Start Your FREE Trial!</h4>
+                        <p>No credit card required*</p>
+                        <form style="margin: 20px 0;">
+                            <input type="email" placeholder="Enter your email" style="width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 5px;">
+                            <input type="password" placeholder="Create password" style="width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 5px;">
+                            <input type="text" placeholder="Credit card number" style="width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 5px;">
+                            <input type="text" placeholder="Expiry date" style="width: 48%; padding: 10px; margin: 5px 1%; border: 1px solid #ccc; border-radius: 5px;">
+                            <input type="text" placeholder="CVV" style="width: 48%; padding: 10px; margin: 5px 1%; border: 1px solid #ccc; border-radius: 5px;">
+                        </form>
+                        <button style="background: #f59e0b; color: white; padding: 15px 30px; border: none; border-radius: 5px;">Start Free Trial</button>
+                        <div style="font-size: 0.7em; color: #9ca3af; margin-top: 10px;">*Credit card required for verification purposes only</div>
+                    </div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="selectAnswer(this, true)">
+                            Contradictory messaging - claims "no credit card required" but asks for it
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(this, false)">
+                            The form is too long for a signup
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(this, false)">
+                            The button color is too aggressive
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 7 -->
+                <div class="quiz-question-container" data-question="7">
+                    <div class="quiz-question">Identify the problem with this social media privacy setting:</div>
+                    <div style="border: 2px solid #e5e7eb; padding: 20px; margin: 20px 0; border-radius: 10px; background: #f9fafb;">
+                        <h4>🔒 Privacy Settings</h4>
+                        <div style="margin: 15px 0;">
+                            <label style="display: block; margin: 10px 0;">
+                                <input type="checkbox"> Don't allow data sharing with third parties
+                            </label>
+                            <label style="display: block; margin: 10px 0;">
+                                <input type="checkbox"> Don't track my browsing behavior
+                            </label>
+                            <label style="display: block; margin: 10px 0;">
+                                <input type="checkbox"> Don't use my data for advertising
+                            </label>
+                            <label style="display: block; margin: 10px 0;">
+                                <input type="checkbox"> Don't include me in data analytics
+                            </label>
+                        </div>
+                        <button style="background: #3b82f6; color: white; padding: 15px 30px; border: none; border-radius: 5px;">Save Privacy Settings</button>
+                    </div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="selectAnswer(this, false)">
+                            Too many privacy options to choose from
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(this, true)">
+                            Uses confusing double negatives - checking boxes should enable privacy, not disable it
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(this, false)">
+                            The interface lacks visual hierarchy
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 8 -->
+                <div class="quiz-question-container" data-question="8">
+                    <div class="quiz-question">What makes this email unsubscribe process problematic?</div>
+                    <div style="border: 2px solid #e5e7eb; padding: 20px; margin: 20px 0; border-radius: 10px; background: #f9fafb;">
+                        <h4>📧 Manage Email Preferences</h4>
+                        <p>We'll miss you! Choose what you'd like to stop receiving:</p>
+                        <div style="margin: 15px 0;">
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="checkbox"> Weekly newsletter with tips
+                            </label>
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="checkbox"> Product updates and new features
+                            </label>
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="checkbox"> Special offers and discounts
+                            </label>
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="checkbox"> Industry news and insights
+                            </label>
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="checkbox"> Community events and webinars
+                            </label>
+                        </div>
+                        <button style="background: #10b981; color: white; padding: 15px 30px; border: none; border-radius: 5px;">Update Preferences</button>
+                        <div style="margin-top: 15px;">
+                            <a href="#" style="color: #9ca3af; font-size: 0.8em; text-decoration: none;">or unsubscribe from all emails</a>
+                        </div>
+                    </div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="selectAnswer(this, true)">
+                            Makes complete unsubscription hard to find and forces users through multiple steps
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(this, false)">
+                            Offers too many granular control options
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(this, false)">
+                            The emotional language is too manipulative
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quiz-navigation">
+                    <button class="quiz-nav-button" id="prevButton" onclick="previousQuestion()" disabled>Previous</button>
+                    <button class="quiz-nav-button" id="nextButton" onclick="nextQuestion()" disabled>Next</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="ethics" class="tab-content">
+            <h2>Ethical Design Framework</h2>
+            
+            <div class="ethics-principle">
+                <h3>🌟 The RESPECT Framework</h3>
+                <div style="margin-top: 20px; font-size: 1.1em;">
+                    <strong>R</strong>espect user autonomy<br>
+                    <strong>E</strong>mpathy in every interaction<br>
+                    <strong>S</strong>implicity over confusion<br>
+                    <strong>P</strong>rivacy by design<br>
+                    <strong>E</strong>quality of choice<br>
+                    <strong>C</strong>larity in communication<br>
+                    <strong>T</strong>rust through transparency
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <span>🤔 Ethical Decision-Making Process</span>
+                    <span class="collapsible-arrow">▼</span>
+                </div>
+                <div class="collapsible-content">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0;">
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                            <h4 style="color: #8b5cf6;">1. Question Intent</h4>
+                            <p>Does this design serve the user's goals or primarily benefit the business?</p>
+                        </div>
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                            <h4 style="color: #8b5cf6;">2. Test Transparency</h4>
+                            <p>Would users be comfortable if they knew exactly how this works?</p>
+                        </div>
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                            <h4 style="color: #8b5cf6;">3. Consider Consequences</h4>
+                            <p>What are the potential negative outcomes for users?</p>
+                        </div>
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                            <h4 style="color: #8b5cf6;">4. Seek Alternatives</h4>
+                            <p>How can we achieve business goals while respecting users?</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <span>⚠️ Red Flags Checklist</span>
+                    <span class="collapsible-arrow">▼</span>
+                </div>
+                <div class="collapsible-content">
+                    <div style="background: #fef2f2; padding: 25px; border-radius: 15px; border-left: 5px solid #ef4444;">
+                        <ul style="list-style-type: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 10px;">
+                            <li>⚠️ Making it hard to cancel or unsubscribe</li>
+                            <li>⚠️ Hiding costs until the last moment</li>
+                            <li>⚠️ Using shame or fear to pressure decisions</li>
+                            <li>⚠️ Pre-selecting expensive options</li>
+                            <li>⚠️ Making "No" harder to find than "Yes"</li>
+                            <li>⚠️ Using confusing language or double negatives</li>
+                            <li>⚠️ Creating false urgency or scarcity</li>
+                            <li>⚠️ Disguising ads as content</li>
+                            <li>⚠️ Requesting unnecessary permissions</li>
+                            <li>⚠️ Making privacy settings confusing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <span>💡 Best Practices for Ethical Design</span>
+                    <span class="collapsible-arrow">▼</span>
+                </div>
+                <div class="collapsible-content">
+                    <div style="background: #ecfdf5; padding: 25px; border-radius: 15px; border-left: 5px solid #10b981;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                            <div>
+                                <h4 style="color: #059669; margin-bottom: 10px;">✅ Clear Communication</h4>
+                                <ul style="padding-left: 20px;">
+                                    <li>Use plain language</li>
+                                    <li>Be upfront about costs</li>
+                                    <li>Explain why you need data</li>
+                                    <li>Make terms easy to understand</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 style="color: #059669; margin-bottom: 10px;">✅ Respect User Choice</h4>
+                                <ul style="padding-left: 20px;">
+                                    <li>Make all options equally visible</li>
+                                    <li>Don't pre-select paid options</li>
+                                    <li>Allow easy cancellation</li>
+                                    <li>Provide clear opt-out mechanisms</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 style="color: #059669; margin-bottom: 10px;">✅ Build Trust</h4>
+                                <ul style="padding-left: 20px;">
+                                    <li>Be transparent about data use</li>
+                                    <li>Provide clear privacy controls</li>
+                                    <li>Honor user preferences</li>
+                                    <li>Admit mistakes honestly</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="cases" class="tab-content">
+            <h2>Real-World Case Studies</h2>
+            
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <span>💸 Hall of Shame: Major Dark Pattern Failures</span>
+                    <span class="collapsible-arrow">▼</span>
+                </div>
+                <div class="collapsible-content">
+                    <div class="case-study">
+                        <h3>🔍 Case Study 1: The $50M Subscription Trap</h3>
+                        <p><strong>Company:</strong> Major fitness app</p>
+                        <p><strong>Dark Pattern:</strong> "Free" trial requiring credit card, buried cancellation process, no reminder before charging, charged immediately after trial</p>
+                        <p><strong>Impact:</strong> $50M FTC fine, class action lawsuit, 40% user churn, brand reputation crisis</p>
+                        <p><strong>Lesson:</strong> Short-term revenue gains from deceptive practices lead to massive long-term costs</p>
+                    </div>
+
+                    <div class="case-study">
+                        <h3>🔍 Case Study 2: The Privacy Illusion</h3>
+                        <p><strong>Company:</strong> Social media giant</p>
+                        <p><strong>Dark Pattern:</strong> Privacy settings designed to look protective while defaulting to maximum data collection, confusing language</p>
+                        <p><strong>Impact:</strong> $5B FTC fine, congressional hearings, GDPR violations, user exodus to competitors</p>
+                        <p><strong>Lesson:</strong> Transparency isn't just ethical—it's essential for sustainable business</p>
+                    </div>
+
+                    <div class="case-study">
+                        <h3>🔍 Case Study 3: The Confirm-Shaming Backfire</h3>
+                        <p><strong>Company:</strong> Email marketing service</p>
+                        <p><strong>Dark Pattern:</strong> Unsubscribe options like "No, I don't want to grow my business" and "Yes, I hate saving money"</p>
+                        <p><strong>Impact:</strong> Viral negative social media coverage, 60% customer exodus, GDPR fines, required public apology</p>
+                        <p><strong>Lesson:</strong> Respect builds loyalty; manipulation destroys it and goes viral</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <span>🏆 Success Stories: Ethical Design Wins</span>
+                    <span class="collapsible-arrow">▼</span>
+                </div>
+                <div class="collapsible-content">
+                    <div style="background: #ecfdf5; padding: 25px; border-radius: 15px; border-left: 5px solid #10b981; margin-top: 20px;">
+                        <h4>✅ Buffer's Transparent Pricing Revolution</h4>
+                        <p><strong>Approach:</strong> Clear pricing, easy cancellation, honest communication about what users get</p>
+                        <p><strong>Result:</strong> Industry-leading customer satisfaction (98%), 40% growth through word-of-mouth, became pricing benchmark for industry</p>
+                        
+                        <h4 style="margin-top: 25px;">✅ Mailchimp's "Export Anytime" Strategy</h4>
+                        <p><strong>Approach:</strong> Made it easy to export data and switch to competitors, transparent about limitations</p>
+                        <p><strong>Result:</strong> Increased customer loyalty, became competitive advantage, 85% customer retention rate</p>
+                        
+                        <h4 style="margin-top: 25px;">✅ Patagonia's Anti-Consumption Campaign</h4>
+                        <p><strong>Approach:</strong> "Don't Buy This Jacket" campaign, repair instead of replace messaging</p>
+                        <p><strong>Result:</strong> 30% sales increase, stronger customer relationships, brand value increased 5x</p>
+
+                        <h4 style="margin-top: 25px;">✅ Apple's Privacy-First Approach</h4>
+                        <p><strong>Approach:</strong> App Tracking Transparency, privacy nutrition labels, "Privacy is a fundamental human right"</p>
+                        <p><strong>Result:</strong> Increased customer trust, competitive advantage, influenced industry standards</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <span>📊 Research & Impact Data</span>
+                    <span class="collapsible-arrow">▼</span>
+                </div>
+                <div class="collapsible-content">
+                    <div style="background: #f0f9ff; padding: 25px; border-radius: 15px; border-left: 5px solid #06b6d4;">
+                        <h4>📈 The Cost of Dark Patterns</h4>
+                        <ul style="margin: 15px 0; padding-left: 20px;">
+                            <li><strong>$2.1B+</strong> in fines paid by major tech companies for dark patterns in 2023</li>
+                            <li><strong>68%</strong> of users abandon brands after experiencing deceptive design</li>
+                            <li><strong>85%</strong> of users check reviews specifically for "hidden fees" and "hard to cancel"</li>
+                            <li><strong>3x</strong> higher customer acquisition cost for companies with poor trust ratings</li>
+                        </ul>
+
+                        <h4 style="margin-top: 25px;">📊 The Value of Ethical Design</h4>
+                        <ul style="margin: 15px 0; padding-left: 20px;">
+                            <li><strong>73%</strong> higher customer lifetime value for trusted brands</li>
+                            <li><strong>42%</strong> more likely to recommend ethical companies</li>
+                            <li><strong>65%</strong> of consumers pay premium for transparent pricing</li>
+                            <li><strong>89%</strong> of users prefer clear, honest interfaces even if it means fewer conversions</li>
+                        </ul>
+
+                        <h4 style="margin-top: 25px;">🌍 Global Regulatory Response</h4>
+                        <ul style="margin: 15px 0; padding-left: 20px;">
+                            <li><strong>GDPR (EU):</strong> Right to clear consent, easy data portability</li>
+                            <li><strong>CCPA (California):</strong> Transparent data collection practices</li>
+                            <li><strong>Digital Services Act (EU):</strong> Prohibition of dark patterns</li>
+                            <li><strong>UK Online Safety Bill:</strong> Duty of care for user wellbeing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 100%;"></div>
+            </div>
+            <p style="text-align: center; color: #6b7280;">Congratulations! You've completed the Dark Patterns Educational Lab</p>
+        </div>
+    </div>
+
+    <!-- Celebration Modal -->
+    <div class="celebration" id="celebration">
+        <div class="celebration-content">
+            <div class="celebration-emoji">🎉</div>
+            <h2 style="color: #8b5cf6; margin-bottom: 15px;">Congratulations!</h2>
+            <p style="font-size: 1.2em; margin-bottom: 20px;">You've completed the Dark Patterns Recognition Quiz!</p>
+            <div style="background: #f3f4f6; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <strong>Your Score: <span id="finalScore">0</span>/8</strong>
+                <div id="scoreMessage" style="margin-top: 10px; color: #6b7280;"></div>
+            </div>
+            <button onclick="closeCelebration()" style="background: linear-gradient(135deg, #8b5cf6, #06b6d4); color: white; border: none; padding: 15px 30px; border-radius: 10px; cursor: pointer; font-weight: bold;">Continue Learning</button>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestionIndex = 0;
+        let quizScore = 0;
+        let answeredQuestions = [];
+
+        function toggleMenu() {
+            const navTabs = document.getElementById('navTabs');
+            navTabs.classList.toggle('active');
+        }
+
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Activate clicked button
+            event.target.classList.add('active');
+
+            // Close mobile menu
+            document.getElementById('navTabs').classList.remove('active');
+        }
+
+        function toggleCollapsible(header) {
+            const content = header.nextElementSibling;
+            const arrow = header.querySelector('.collapsible-arrow');
+            
+            content.classList.toggle('active');
+            arrow.classList.toggle('rotated');
+        }
+
+        function selectAnswer(element, isCorrect) {
+            // Check if question already answered
+            if (answeredQuestions.includes(currentQuestionIndex)) return;
+
+            // Disable all options
+            const options = element.parentNode.querySelectorAll('.quiz-option');
+            options.forEach(option => {
+                option.classList.add('disabled');
+            });
+            
+            // Mark answer
+            if (isCorrect) {
+                element.classList.add('correct');
+                quizScore++;
+                setTimeout(() => {
+                    showFeedback('Correct! You successfully identified the dark pattern.', true);
+                }, 500);
+            } else {
+                element.classList.add('incorrect');
+                // Show correct answer
+                options.forEach(option => {
+                    if (option.onclick.toString().includes('true')) {
+                        option.classList.add('correct');
+                    }
+                });
+                setTimeout(() => {
+                    showFeedback('Not quite right. The correct answer is highlighted in green.', false);
+                }, 500);
+            }
+
+            // Mark as answered
+            answeredQuestions.push(currentQuestionIndex);
+            
+            // Update score display
+            document.getElementById('quizScore').textContent = quizScore;
+            
+            // Enable next button
+            document.getElementById('nextButton').disabled = false;
+        }
+
+        function showFeedback(message, isCorrect) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${isCorrect ? '#10b981' : '#ef4444'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+                z-index: 1000;
+                max-width: 300px;
+                animation: slideInRight 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < 7) {
+                // Hide current question
+                document.querySelector(`[data-question="${currentQuestionIndex + 1}"]`).classList.remove('active');
+                
+                // Show next question
+                currentQuestionIndex++;
+                document.querySelector(`[data-question="${currentQuestionIndex + 1}"]`).classList.add('active');
+                
+                // Update navigation
+                updateQuizNavigation();
+                updateQuizProgress();
+            } else {
+                // Quiz completed
+                showCelebration();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                // Hide current question
+                document.querySelector(`[data-question="${currentQuestionIndex + 1}"]`).classList.remove('active');
+                
+                // Show previous question
+                currentQuestionIndex--;
+                document.querySelector(`[data-question="${currentQuestionIndex + 1}"]`).classList.add('active');
+                
+                // Update navigation
+                updateQuizNavigation();
+                updateQuizProgress();
+            }
+        }
+
+        function updateQuizNavigation() {
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
+            
+            // Update current question display
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            
+            // Enable/disable prev button
+            prevButton.disabled = currentQuestionIndex === 0;
+            
+            // Enable/disable next button
+            const isAnswered = answeredQuestions.includes(currentQuestionIndex);
+            nextButton.disabled = !isAnswered;
+            
+            // Update next button text
+            if (currentQuestionIndex === 7) {
+                nextButton.textContent = 'Complete Quiz';
+            } else {
+                nextButton.textContent = 'Next';
+            }
+        }
+
+        function updateQuizProgress() {
+            const progress = ((currentQuestionIndex + 1) / 8) * 100;
+            document.getElementById('quizProgress').style.width = progress + '%';
+        }
+
+        function showCelebration() {
+            const celebration = document.getElementById('celebration');
+            const finalScore = document.getElementById('finalScore');
+            const scoreMessage = document.getElementById('scoreMessage');
+            
+            finalScore.textContent = quizScore;
+            
+            let message = '';
+            if (quizScore === 8) {
+                message = '🏆 Perfect score! You\'re a dark pattern detection expert!';
+            } else if (quizScore >= 6) {
+                message = '🌟 Excellent work! You have a strong understanding of dark patterns.';
+            } else if (quizScore >= 4) {
+                message = '👍 Good job! Review the examples to strengthen your skills.';
+            } else {
+                message = '📚 Keep learning! Review the materials and try again.';
+            }
+            
+            scoreMessage.textContent = message;
+            celebration.classList.add('active');
+        }
+
+        function closeCelebration() {
+            document.getElementById('celebration').classList.remove('active');
+        }
+
+        // Initialize quiz
+        document.addEventListener('DOMContentLoaded', function() {
+            updateQuizNavigation();
+            updateQuizProgress();
+            
+            // Animate progress bars when visible
+            const progressBars = document.querySelectorAll('.progress-fill');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const width = entry.target.style.width;
+                        entry.target.style.width = '0%';
+                        setTimeout(() => {
+                            entry.target.style.width = width;
+                        }, 500);
+                    }
+                });
+            });
+            
+            progressBars.forEach(bar => observer.observe(bar));
+        });
+
+        // Add CSS for slide animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+
+    <!-- 
+    Date created: July 06, 2025
+    Tool name: Claude Sonnet 4
+    Prompt used to generate the code: "make it responsive with burger menu , quiz section shows 2/8 but where is the rest of the brain twister quiz questions. for your reference following document will prove excellent resource to up the quality of this existing iteration[https://anandvip.github.io/va-media-manipulation/][check the hall of shame section and research ]. i like it keep it as it is but if it tends to grow larger vertically use collapsible panels to compress the flow.and quiz section once completed celebrates the success of user."
+    
+    README.md:
+    # Dark Patterns Educational Lab - Enhanced Interactive Training Platform
+    
+    ## Purpose
+    This comprehensive educational platform trains UI/UX developers to identify, understand, and avoid dark patterns through interactive examples, brain-twisting quizzes, and real-world case studies. The enhanced version includes mobile responsiveness, complete quiz functionality, and celebration mechanics to gamify the learning experience.
+    
+    ## Key Features
+    - **Responsive Design**: Mobile-first approach with hamburger menu navigation
+    - **Complete 8-Question Quiz**: Brain-twisting questions that challenge pattern recognition skills
+    - **Collapsible Panels**: Efficient use of vertical space for better content organization
+    - **Celebration Animation**: Gamified completion with score-based feedback
+    - **Interactive Examples**: Side-by-side dark pattern vs ethical design comparisons
+    - **Real-world Case Studies**: Hall of shame featuring actual company failures and successes
+    - **Research Data**: Impact statistics and regulatory information
+    - **Progress Tracking**: Visual indicators throughout the learning journey
+    
+    ## Enhanced Quiz System
+    The quiz now includes 8 comprehensive questions covering:
+    1. **Confirm-shaming Recognition**: Identifying guilt-based manipulation
+    2. **Hidden Costs Detection**: Spotting deceptive pricing practices
+    3. **False Urgency Analysis**: Recognizing fake scarcity tactics
+    4. **Privacy Zuckering Identification**: Detecting unnecessary permission requests
+    5. **Forced Continuity Patterns**: Understanding subscription trap mechanics
+    6. **Contradictory Messaging**: Spotting misleading "free" offers
+    7. **Interface Confusion**: Recognizing deliberately confusing privacy settings
+    8. **Unsubscribe Manipulation**: Identifying barriers to opting out
+    
+    ## Mobile Responsiveness
+    - **Hamburger Menu**: Collapsible navigation for mobile devices
+    - **Touch-Friendly**: Optimized button sizes and touch targets
+    - **Flexible Layouts**: Grid systems that adapt to screen sizes
+    - **Readable Typography**: Scalable fonts and appropriate line spacing
+    - **Progressive Enhancement**: Core functionality works on all devices
+    
+    ## Collapsible Content Structure
+    - **Overview Section**: Expandable learning objectives and pattern types
+    - **Examples Section**: Organized by dark pattern category
+    - **Ethics Section**: Frameworks, checklists, and best practices
+    - **Case Studies**: Hall of shame and success stories in separate panels
+    - **Research Data**: Impact statistics and regulatory information
+    
+    ## Celebration & Gamification
+    - **Score-based Feedback**: Different messages based on quiz performance
+    - **Visual Celebration**: Animated completion screen with confetti effect
+    - **Progress Indicators**: Visual feedback throughout the learning journey
+    - **Achievement Recognition**: Perfect score celebration and encouragement
+    
+    ## Educational Methodology
+    - **Learning by Contrast**: Dark patterns vs ethical alternatives
+    - **Interactive Engagement**: Clickable examples and hands-on quizzes
+    - **Real-world Context**: Actual company case studies and consequences
+    - **Practical Application**: Frameworks for ongoing ethical decision-making
+    - **Reinforcement Learning**: Immediate feedback on quiz responses
+    
+    ## Technical Implementation
+    - **Vanilla JavaScript**: No dependencies for maximum compatibility
+    - **CSS Grid & Flexbox**: Modern responsive layout techniques
+    - **CSS Animations**: Smooth transitions and engaging interactions
+    - **Progressive Enhancement**: Works with JavaScript disabled
+    - **Accessibility**: Semantic HTML and keyboard navigation support
+    
+    ## Target Audience
+    - UI/UX design students and professionals
+    - Product managers and developers
+    - Business stakeholders in digital product development
+    - Ethics officers and compliance teams
+    - Anyone responsible for user experience decisions
+    
+    ## Learning Outcomes
+    Upon completion, students will be able to:
+    - Identify 15+ types of dark patterns with 85%+ accuracy
+    - Apply ethical design frameworks to real-world scenarios
+    - Understand the business case for ethical design practices
+    - Recognize regulatory compliance requirements
+    - Create user-respecting interfaces that build long-term trust
+    - Advocate for ethical design practices within their organizations
+    
+    This enhanced platform serves as a comprehensive training tool for creating a generation of designers who prioritize user trust, regulatory compliance, and sustainable business practices over short-term manipulation tactics.
+    -->
+</body>
+</html>
